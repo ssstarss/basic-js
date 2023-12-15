@@ -20,14 +20,60 @@ const { NotImplementedError } = require('../extensions/index.js');
  * 
  */
 class VigenereCipheringMachine {
-  encrypt() {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+  constructor (direction) {
+    this.direction = direction
   }
-  decrypt() {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
-  }
+  encrypt(input, code) {
+    if (input == undefined || code == undefined) throw new Error('Incorrect arguments!');
+    let letters = 'abcdefghijklmnopqrstuvwxyz';
+    input = input.split('');
+    code = code.split('');
+    letters = letters.split('');
+    input = input.map (item => { return item.toUpperCase() });
+    letters = letters.map (item => { return item.toUpperCase() });
+    code = code.map (item => { return item.toUpperCase() });
+    let codeIndex = 0;
+    input.forEach((item,index,arr) => {
+        if (letters.includes(item)) {
+        let nCode = letters.indexOf(code[codeIndex]);
+        let nInput = letters.indexOf(item);
+        nInput += nCode;
+        if (nInput > 25) nInput -= 26;
+        arr[index] = letters[nInput].toUpperCase(); 
+        codeIndex += 1;
+        if (codeIndex == code.length) codeIndex = 0;
+        }
+    })
+    if (this.direction  == false)  input = input.reverse();
+    input = input.join(''); 
+    return input;
+}
+
+ decrypt(input, code) {
+  if (input == undefined || code == undefined) throw new Error('Incorrect arguments!');
+    let letters = 'abcdefghijklmnopqrstuvwxyz';
+    input = input.split('');
+    code = code.split('');
+    letters = letters.split('');
+    input = input.map (item => { return item.toUpperCase() });
+    letters = letters.map (item => { return item.toUpperCase() });
+    code = code.map (item => { return item.toUpperCase() });
+    let codeIndex = 0;
+    input.forEach((item,index,arr) => {
+        if (letters.includes(item)) {
+        let nCode = letters.indexOf(code[codeIndex]);
+        let nInput = letters.indexOf(item);
+        nInput -= nCode;
+        if (nInput < 0) nInput += 26;
+        arr[index] = letters[nInput].toUpperCase(); 
+        codeIndex += 1;
+        if (codeIndex == code.length) codeIndex = 0;
+        }
+    })
+    if (this.direction  == false)  input = input.reverse();
+    input = input.join(''); 
+    return input;
+}
 }
 
 module.exports = {

@@ -23,17 +23,58 @@ const { NotImplementedError } = require('../extensions/index.js');
  *
  */
 function getDNSStats( domains ) {
-/*let arr1, arr2, arr3 = [];
-  for (i = 0; i < domains.length; i++){
+
+let res = new Array();
+
+let arr =new Array();
+domains.forEach( (item, index) => 
+  arr[index] = item.split('.').reverse() )
+
+ arr.forEach (item => {
+  n = 0;
+  str = '';
+  item.forEach((it, ) => {
+      str = it + str;
+    let has = res.find(e => e.dns.includes(str) );
+    if (! has){
+        n = domains.reduce((acc, el) => {
+      if (el.includes(str)) acc = acc + 1;
+      return acc;
+    },0 );
     
-    d1 = domains[i].slice(domains[i].lastIndexOf('.',domains[i],length+1));
-    arr1[i] = domains[i].slice(domains[i].firstIndexOf('.')+1, domains[i].length+1);
-    arr2[i] = domains[i].slice(arr1.lastIndexOf('.')+1, domains[i].length+1);
+    res.push({dns: str,n: n});
+    
   }
-*/
+  str =  '.' + str;
+
+  })
+ })
+ res.forEach(item => {
+  a = item.dns.split('.');
+  a = a.reverse();
+  stroke = a.map(item => item = '.' + item).join('');
+  item.dns = stroke;
+
+});
+let out = {};
+res = res.reduce((acc,el) =>{
+  acc = acc + `'${el.dns}': ${el.n},`
+  out [el.dns]= el.n ;
+  return acc;
+
+},'' );
+return out;
+
 }
 
-
+/*domains = [
+   'code.yandex.ru',
+  'music.yandex.ru',
+   'yandex.ru'
+ ]
+ console.log (getDNSStats(domains));*/
+ 
 module.exports = {
   getDNSStats
 };
+
